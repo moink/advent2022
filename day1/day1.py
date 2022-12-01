@@ -9,19 +9,15 @@ def main():
 
 
 def process_input(data):
-    result = []
-    for group in data:
-        result.append([int(cals) for cals in group])
-    return result
+    elves = [sum(int(cals) for cals in group) for group in data]
+    return elves
 
 
-def run_part_1(data):
-    elves = [sum(group) for group in data]
+def run_part_1(elves):
     return(max(elves))
 
 
-def run_part_2(data):
-    elves = [sum(group) for group in data]
+def run_part_2(elves):
     return sum(sorted(elves)[-3:])
 
 
