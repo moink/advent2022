@@ -14,7 +14,7 @@ def process_input(data):
 
 
 def run_part_1(elves):
-    return(max(elves))
+    return max(elves)
 
 
 def run_part_2(elves):
