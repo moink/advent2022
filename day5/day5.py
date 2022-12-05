@@ -44,9 +44,8 @@ def get_top_of_stack(stack):
 
 def run_part_2(stack, instructions):
     for num_to_move, from_stack, to_stack in instructions:
-        stack[to_stack].extend(
-            reversed([stack[from_stack].pop() for _ in range(num_to_move)])
-        )
+        crane = reversed([stack[from_stack].pop() for _ in range(num_to_move)])
+        stack[to_stack].extend(crane)
     return get_top_of_stack(stack)
 
 
