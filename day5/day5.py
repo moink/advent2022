@@ -28,7 +28,7 @@ def parse_stack(lines):
 
 
 def parse_instructions(lines):
-    return [[int(char) for char in (re.findall(r'[0-9]+', line))] for line in lines]
+    return [tuple(int(char) for char in re.findall(r'[0-9]+', line)) for line in lines]
 
 
 def run_part_1(stack, instructions):
