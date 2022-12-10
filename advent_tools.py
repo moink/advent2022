@@ -10,13 +10,12 @@ import math
 import os
 import re
 import shutil
-import sys
 import urllib.request
 import warnings
 
-from scipy import signal
-from matplotlib import pyplot as plt
 import numpy as np
+from matplotlib import pyplot as plt
+from scipy import signal
 
 REAL_INPUT_FILENAME = 'input.txt'
 TEST_INPUT_FILENAME = 'test_input.txt'
@@ -48,7 +47,7 @@ def set_up_directory(day):
         os.mkdir(new_dir)
     new_file_name = os.path.join(new_dir, 'day' + str(day) + '.py')
     template_file_name = os.path.join(this_dir, 'template.py')
-    if not(os.path.exists(new_file_name)):
+    if not (os.path.exists(new_file_name)):
         shutil.copy(template_file_name, new_file_name)
     test_file_name = os.path.join(new_dir, TEST_INPUT_FILENAME)
     open(test_file_name, 'a').close()
@@ -276,6 +275,10 @@ class PlottingGrid:
         """
         self.grid = np.zeros(shape, dtype=int)
 
+    def __setitem__(self, key, value):
+        """Set a pixel's value"""
+        self.grid.__setitem__(key, value)
+
     @classmethod
     def from_file(cls, char_map=None, dimension=2, padding=0):
         """Create a new plotting grid from today's input file
@@ -462,6 +465,7 @@ class GameOfLife(PlottingGrid):
     from PlottingGrid) to turn the corner lights on initially (they were
     stuck on in the problem description).
     """
+
     def __init__(self, shape):
         super().__init__(shape)
         dimension = len(shape)
@@ -845,10 +849,12 @@ class Computer(abc.ABC):
         Returns:
             A decorator which marks the method as an operation
         """
+
         def decorator(func):
             """Decorator to mark a method as an operation"""
             cls.operation_map[instruction_first_word] = func
             return func
+
         return decorator
 
     def run_instruction(self, instruction):
