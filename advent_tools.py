@@ -277,7 +277,11 @@ class PlottingGrid:
 
     def __setitem__(self, key, value):
         """Set a pixel's value"""
-        self.grid.__setitem__(key, value)
+        self.grid[key] = value
+
+    def __getitem__(self, index):
+        """Get a pixel's value"""
+        return self.grid[index]
 
     @classmethod
     def from_file(cls, char_map=None, dimension=2, padding=0):
