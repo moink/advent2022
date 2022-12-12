@@ -47,7 +47,6 @@ def find_where(data, val):
 
 
 class HillState(advent_tools.StateForGraphs):
-
     elev, end_pos, start_pos = read_elevation_map()
 
     def __init__(self, start_pos):
@@ -65,9 +64,10 @@ class HillState(advent_tools.StateForGraphs):
         for delta_x, delta_y in steps:
             new_pos = (self.cur_pos[0] + delta_x, self.cur_pos[1] + delta_y)
             with contextlib.suppress(IndexError):
-                if self.elev[new_pos] - self.elev[self.cur_pos] <=1:
+                if self.elev[new_pos] - self.elev[self.cur_pos] <= 1:
                     result.add(HillState(new_pos))
         return result
+
 
 if __name__ == '__main__':
     main()
