@@ -277,6 +277,8 @@ class PlottingGrid:
 
     def __setitem__(self, key, value):
         """Set a pixel's value"""
+        if any(val < 0 for val in key):
+            raise IndexError
         self.grid[key] = value
 
     def __getitem__(self, index):

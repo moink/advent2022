@@ -1,4 +1,5 @@
 import itertools
+import json
 
 import advent_tools
 
@@ -32,7 +33,7 @@ class MessagePacket:
 
     def __init__(self, signal):
         if isinstance(signal, str):
-            self.packet = eval(signal)
+            self.packet = json.loads(signal)
         else:
             self.packet = signal
 
