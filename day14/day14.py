@@ -1,33 +1,12 @@
-import contextlib
-import collections
 import copy
-import functools
-import itertools
-import math
-import re
-import statistics
-import unittest
-from dataclasses import dataclass, field
 
 import numpy as np
-import pandas as pd
-from matplotlib import pyplot as plt
 
 import advent_tools
 
 
 def main():
-    # advent_tools.TESTING = True
     data = advent_tools.read_all_integers()
-    # data = advent_tools.read_whole_input()
-    # data = advent_tools.read_input_lines()
-    # data = advent_tools.read_input_no_strip()
-    # data = advent_tools.read_dict_from_input_file(sep=' => ', key='left')
-    # data = advent_tools.read_dict_of_list_from_file(sep=' => ', key='left')
-    # data = advent_tools.read_one_int_per_line()
-    # data = advent_tools.PlottingGrid.from_file({'.' : 0, '#' : 1})
-    # data = advent_tools.read_input_line_groups()
-    # data = advent_tools.read_nparray_from_digits()
     data = process_input(data)
     print('Part 1:', run_part_1(data))
     print('Part 2:', run_part_2(data))
@@ -51,15 +30,7 @@ def array_trim(arr, margin=0):
     min_x = min(all_x) - 150
     max_x = max(all_x) + 150
     max_y = max(all_y) + 2
-    print(max_y)
     return arr[0:max_y +1, min_x: max_x + 1], min_x
-    pass
-    # all = np.where(arr != 0)
-    # idx = ()
-    # for i in range(len(all)):
-    #     idx += (np.s_[all[i].min()-margin: all[i].max()+margin+1],)
-    # shift = (idx[0].start, idx[1].start)
-    # return arr[idx], shift
 
 def run_part_1(data):
     grid, start_pos = data
@@ -84,12 +55,10 @@ def run_sand_sim(grid, start_pos):
                     grid[cur_y, cur_x] = 2
                     if (cur_y, cur_x) == start_pos:
                         keep_going = False
-                    # grid.draw()
                     break
             except IndexError:
                 keep_going = False
                 break
-
         count = count + 1
     grid.show()
     return count
@@ -98,7 +67,6 @@ def run_sand_sim(grid, start_pos):
 def run_part_2(data):
     grid, start_pos = data
     grid.grid[-1, :] = 1
-    grid.show()
     return run_sand_sim(grid, start_pos) + 1
 
 
