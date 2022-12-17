@@ -1,6 +1,6 @@
 import itertools
-import advent_tools
 
+import advent_tools
 
 ALL_SHAPES = {
     0: {(0, 0), (1, 0), (2, 0), (3, 0)},
@@ -34,14 +34,14 @@ def find_period(data):
             cache_key = (profile, shape_num, jet_index)
             if cache_key in cycle_record:
                 old_step, old_lines = cycle_record[cache_key]
-                return old_step, old_lines, step, lines, cycle_record
+                return (step - old_step), (lines - old_lines), cycle_record.values()
             cycle_record[cache_key] = (step, lines)
         step = step + 1
         cur_x = 2
         cur_y = lines + 4
         shape = ALL_SHAPES[shape_num]
         moved = True
-        while moved :
+        while moved:
             jet_index, jet = next(jet_cycle)
             if jet == ">":
                 cur_x, cur_y, _ = try_move(grid, shape, cur_x, cur_y, 1, 0)
@@ -54,6 +54,7 @@ def find_period(data):
 
 def find_max_y(grid):
     return max(y for _, y in grid)
+
 
 def try_move(grid, shape, cur_x, cur_y, delta_x, delta_y):
     new_x = cur_x + delta_x
@@ -82,19 +83,17 @@ def get_profile(grid):
 
 
 def get_max_in_col(grid, xval):
-    return max(y for x,y in grid if x==xval)
+    return max(y for x, y in grid if x == xval)
 
 
 def get_lines(period_info, num_steps):
-    old_step, old_lines, step, lines, cycle_record = period_info
-    step_period = step - old_step
-    line_period = lines - old_lines
+    step_period, line_period, step_line_map = period_info
     remainder = num_steps % step_period
     same_rem_steps, same_rem_lines = [
-        (k, v) for k, v in cycle_record.values() if (k % step_period) == remainder
+        (step, lines) for step, lines in step_line_map
+        if (step % step_period) == remainder
     ][0]
-    answer = (num_steps - same_rem_steps) // step_period * line_period + same_rem_lines
-    return answer
+    return (num_steps - same_rem_steps) // step_period * line_period + same_rem_lines
 
 
 if __name__ == '__main__':
