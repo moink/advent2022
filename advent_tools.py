@@ -660,19 +660,28 @@ def number_of_reachable_in_steps(current_state, max_steps):
         to understand the required methods for the states used in the graph.
         The states must implement __hash__, __eq__, and possible_next_states
     """
+    discovered = get_all_states_in_steps(current_state, max_steps)
+    return len(discovered)
+
+
+def get_all_states_in_steps(current_state, max_steps):
     queue = collections.deque()
     discovered = {current_state: 0}
     queue.append(current_state)
+    max_steps_seen = 0
     while queue:
         state = queue.popleft()
         num_steps = discovered[state]
         if num_steps < max_steps:
+            if num_steps > max_steps_seen:
+                max_steps_seen = num_steps
+                print(max_steps_seen, len(queue))
             new_states = state.possible_next_states()
             for new_state in new_states:
                 if new_state not in discovered:
                     discovered[new_state] = num_steps + 1
                     queue.append(new_state)
-    return len(discovered)
+    return discovered
 
 
 def longest_path(current_state):
