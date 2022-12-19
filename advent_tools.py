@@ -665,6 +665,29 @@ def number_of_reachable_in_steps(current_state, max_steps):
 
 
 def get_all_states_in_steps(current_state, max_steps):
+    """Find all states reachable from this one in max steps
+
+    Use a breadth-first search to get all reachable steps from the current state,
+    with a maximum of max_steps steps, when each state can provide the states it
+    can reach in one state.
+
+    Args:
+        current_state: StateForGraphs
+            The state at the beginning of the search; the root of the tree.
+        max_steps: int
+            The maximum number of steps to take, using
+            state.possible_next_states to find states reachable in one step
+            from the current state
+
+    Returns:
+        reachable : set of type(current_state)
+            All distinct states reachable from current_state, with fewer or equal
+            to max_steps steps.
+
+    See Also: StateForGraphs
+        to understand the required methods for the states used in the graph.
+        The states must implement __hash__, __eq__, and possible_next_states
+    """
     queue = collections.deque()
     discovered = {current_state: 0}
     queue.append(current_state)
