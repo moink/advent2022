@@ -1132,6 +1132,9 @@ class LinkedListNode:
     def __str__(self):
         return str(self.data)
 
+    def __repr__(self):
+        return str(self.data)
+
     def __hash__(self):
         return hash(self.data)
 
@@ -1180,12 +1183,7 @@ class CircularLinkedList:
     def __str__(self):
         result = str(self.head) + ' '
         place = self.head.next
-        n = 100
-        count = 0
         while place != self.head:
-            count += 1
-            if count > n:
-                raise RuntimeError('lost head')
             if place == self.current:
                 result = result + '(' + str(place) + ') '
             else:
