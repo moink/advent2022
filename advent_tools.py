@@ -1192,6 +1192,16 @@ class CircularLinkedList:
         return result
 
 
+def print_linked_list(head):
+    """Print a linked list, starting with the specified node"""
+    result = str(head) + ' '
+    place = head.next
+    while place != head:
+        result = result + str(place) + ' '
+        place = place.next
+    print(result)
+
+
 if __name__ == '__main__':
     start_coding_today()
     # today = 1
