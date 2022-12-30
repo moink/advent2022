@@ -37,10 +37,6 @@ def run_part_1(data):
     return calc_password(row, col, facing)
 
 
-def calc_password(row, col, facing):
-    return 1000 * row + 4 * col + facing
-
-
 def follow_path(data):
     board_map, path = data
     cur_pos, _ = find_next_pos(board_map, (0, 0), 0)
@@ -50,15 +46,7 @@ def follow_path(data):
             cur_pos = take_up_to_n_steps(cur_pos, facing, step, board_map)
         else:
             facing = take_turn(facing, step)
-    return tuple(n + 1 for n in cur_pos), facing
-
-
-def take_turn(facing, turn):
-    if turn == "R":
-        delta = 1
-    else:
-        delta = -1
-    return (facing + delta) % 4
+    return cur_pos, facing
 
 
 def take_up_to_n_steps(cur_pos, facing, num_steps, board_map):
@@ -81,6 +69,13 @@ def find_next_pos(board_map, position, facing):
 
 def take_one_step(position, facing, shape):
     size_y, size_x = shape
+    y, x = one_step_facing(position, facing)
+    x = check_edges(x, size_x)
+    y = check_edges(y, size_y)
+    return y, x
+
+
+def one_step_facing(position, facing):
     y, x = position
     match facing:
         case 0:  # > right
@@ -91,8 +86,6 @@ def take_one_step(position, facing, shape):
             x = x - 1
         case 3:  # ^ up
             y = y - 1
-    x = check_edges(x, size_x)
-    y = check_edges(y, size_y)
     return y, x
 
 
@@ -104,18 +97,44 @@ def check_edges(x, size_x):
     return x
 
 
+def take_turn(facing, turn):
+    if turn == "R":
+        delta = 1
+    else:
+        delta = -1
+    return (facing + delta) % 4
+
+
+def calc_password(row, col, facing):
+    return 1000 * (row + 1) + 4 * (col + 1) + facing
+
+
+def run_part_2(data):
+    board_map, path = data
+    cur_pos, _ = find_next_pos(board_map, (0, 0), 0)
+    facing = 0
+    for step in path:
+        if isinstance(step, int):
+            cur_pos, facing = take_n_part_two_steps(cur_pos, facing, step, board_map)
+        else:
+            facing = take_turn(facing, step)
+    return calc_password(cur_pos[0], cur_pos[1], facing)
+
+
+def take_n_part_two_steps(cur_pos, facing, num_steps, board_map):
+    for _ in range(num_steps):
+        next_pos, new_facing = take_one_part_two_step(board_map, cur_pos, facing)
+        next_val = board_map[next_pos]
+        if next_val == WALL:
+            return cur_pos, facing
+        cur_pos = next_pos
+        facing = new_facing
+    return cur_pos, facing
+
+
 def take_one_part_two_step(board_map, position, facing):
     size_y, size_x = board_map.grid.shape
-    y, x = position
-    match facing:
-        case 0:  # > right
-            x = x + 1
-        case 1:  # v down
-            y = y + 1
-        case 2:  # < left
-            x = x - 1
-        case 3:  # ^ up
-            y = y - 1
+    y, x = one_step_facing(position, facing)
     if x >= size_x or x < 0 or y >= size_y or y < 0 or board_map[y, x] == OFF_MAP:
         new_position, new_facing = go_around_corner(position, facing)
         return new_position, new_facing
@@ -164,29 +183,6 @@ def go_around_corner(position, facing):
             if facing == 3:  # top edge of B, goes to F up
                 return (4 * CUBE_EDGE_LENGTH - 1, x - 2 * CUBE_EDGE_LENGTH), 3
     raise ValueError(f"Invalid col {col}, row {row}, facing {facing}, y {y}, x {x}")
-
-
-def run_part_2(data):
-    board_map, path = data
-    cur_pos, _ = find_next_pos(board_map, (0, 0), 0)
-    facing = 0
-    for step in path:
-        if isinstance(step, int):
-            cur_pos, facing = take_n_part_two_steps(cur_pos, facing, step, board_map)
-        else:
-            facing = take_turn(facing, step)
-    return calc_password(cur_pos[0], cur_pos[1], facing)
-
-
-def take_n_part_two_steps(cur_pos, facing, num_steps, board_map):
-    for _ in range(num_steps):
-        next_pos, new_facing = take_one_part_two_step(board_map, cur_pos, facing)
-        next_val = board_map[next_pos]
-        if next_val == WALL:
-            return cur_pos, facing
-        cur_pos = next_pos
-        facing = new_facing
-    return cur_pos, facing
 
 
 if __name__ == '__main__':
