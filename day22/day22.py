@@ -34,6 +34,10 @@ def read_input():
 
 def run_part_1(data):
     ((row, col), facing) = follow_path(data)
+    return calc_password(row, col, facing)
+
+
+def calc_password(row, col, facing):
     return 1000 * row + 4 * col + facing
 
 
@@ -113,9 +117,7 @@ def take_one_part_two_step(board_map, position, facing):
         case 3:  # ^ up
             y = y - 1
     if x >= size_x or x < 0 or y >= size_y or y < 0 or board_map[y, x] == OFF_MAP:
-        print(position[0], position[1], "=")
         new_position, new_facing = go_around_corner(position, facing)
-        print("=", new_position[0], new_position[1])
         return new_position, new_facing
     return (y, x), facing
 
@@ -171,11 +173,9 @@ def run_part_2(data):
     for step in path:
         if isinstance(step, int):
             cur_pos, facing = take_n_part_two_steps(cur_pos, facing, step, board_map)
-            print(cur_pos[0], cur_pos[1], facing)
         else:
             facing = take_turn(facing, step)
-            print(step, facing)
-    return 1000 * (cur_pos[0] + 1) + 4 * (cur_pos[1] + 1) + facing
+    return calc_password(cur_pos[0], cur_pos[1], facing)
 
 
 def take_n_part_two_steps(cur_pos, facing, num_steps, board_map):
